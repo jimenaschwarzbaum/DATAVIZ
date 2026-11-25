@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un siglo de películas nominadas al Óscar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navegación: barra de progreso por secciones + menú hamburguesa.
+       Las secciones se definen en SECTIONS (script.js) y cada .step indica
+       a cuál pertenece con data-section. -->
+  <div id="progress" aria-hidden="true"></div>
+
+  <button id="menu-btn" aria-label="Abrir menú de secciones" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="menu" hidden aria-label="Secciones">
+    <ol></ol>
+  </nav>
+
+  <!-- Grilla de video: patrón de puntos de relleno (miles de puntos chicos, sin
+       tooltip) que cubre la pantalla, debajo de los puntos de las películas -->
+  <div id="dot-grid" aria-hidden="true"></div>
+
+  <div class="scrolly">
+
+    <!-- Visualización fija (sticky): aquí viven los puntos -->
+    <div id="vis">
+      <svg id="svg">
+        <g id="lines"></g>
+        <g id="glow"></g>
+        <g id="extra"></g>
+        <g id="dots"></g>
+        <g id="zoomlinks"></g>
+        <g id="labels"></g>
+      </svg>
+      <div id="legend"></div>
+    </div>
+
+    <!-- Textos que van pasando con el scroll. Cada .step = una configuración -->
+    <div class="steps">
+      <!-- Portada: la grilla de video con "And the Oscar goes to" (con sonido) -->
+      <section class="step" data-step="0" data-section="intro">
+        <div class="card"><p class="hint">Haz scroll ↓</p></div>
+      </section>
+
+      <!-- Después del video: la palabra OSCARS hecha de puntos (sin texto) -->
+      <section class="step" data-step="1" data-section="intro">
+        <div class="card"></div>
+      </section>
+
+      <section class="step" data-step="2" data-section="intro">
+        <div class="card">
+          <span class="big-num">621 películas</span>
+          <h1>Un siglo de nominadas a Mejor Película</h1>
+          <p>Desde 1927, 621 producciones compitieron por el mayor premio de la Academia.</p>
+        </div>
+      </section>
+
+      <section class="step" data-step="3" data-section="intro">
+        <div class="card">
+          <h2>Solo una se lleva el premio.</h2>
+          <p>Solo 98 películas ganadoras forman el grupo exclusivo de mayor prestigio cinematográfico.</p>
+        </div>
+      </section>
+
+      <!-- Pantalla dividida: la primera (Wings) y la última ganadora (One Battle After
+           Another); textos y videos en #split (sin texto en la columna) -->
+      <section class="step zoom-step" data-step="4" data-section="intro">
+        <div class="card"></div>
+      </section>
+      <!-- Deslizamiento horizontal: de Wings a One Battle After Another -->
+      <section class="step zoom-step" data-step="5" data-section="intro">
+        <div class="card"></div>
+      </section>
+
+      <section class="step" data-step="6" data-section="intro">
+        <div class="card">
+          <h2>Pero, ¿qué características en común las ayudaron a definirse ganadoras?</h2>
+        </div>
+      </section>
+
+      <!-- Grilla de video: los puntos de la estatuilla se agrandan hasta una grilla de
+           puntos muy pequeños (uno por película) que cubre la pantalla; cada punto es una ventana al video (sin texto) -->
+      <!-- DESACTIVADO con hidden: su video ahora está en la portada. Para volver a activarlo, borrar "hidden" -->
+      <section class="step" data-step="7" data-section="intro" hidden>
+        <div class="card"></div>
+      </section>
+
+      <!-- Momento intermedio: la palabra GÉNERO hecha de puntos (sin texto) -->
+      <section class="step" data-step="8" data-section="genero">
+        <div class="card"></div>
+      </section>
+
+      <!-- Órbitas: cada género escrito en su color, con sus películas orbitando (sin texto).
+           DESACTIVADO por ahora con el atributo hidden: para volver a activarlo, borrar "hidden" -->
+      <section class="step" data-step="9" data-section="genero" hidden>
+        <div class="card"></div>
+      </section>
+
+      <!-- El rectángulo del paso 1 dividido en bloques de color por género (leyenda arriba) -->
+      <section class="step" data-step="10" data-section="genero">
+        <div class="card">
+          <h2>¿Cuál es el género más común en los Oscars?</h2>
+          <p>La variedad de temáticas no está distribuida uniformemente.</p>
+        </div>
+      </section>
+
+      <!-- Mismo rectángulo: el drama en azul; los demás géneros grises y tenues -->
+      <section class="step" data-step="11" data-section="genero">
+        <div class="card">
+          <span class="big-num">36%</span>
+          <h1>El Drama domina</h1>
+          <p>El género con mayor cantidad de producciones nominadas, con 222 películas.</p>
+        </div>
+      </section>
+
+      <!-- Mismo rectángulo por género: se iluminan las ganadoras de drama.
+           DESACTIVADO por ahora con el atributo hidden: para volver a activarlo, borrar "hidden" -->
+      <section class="step" data-step="12" data-section="genero" hidden>
+        <div class="card">
+          <h1>33 ganadoras</h1>
+          <p>De 222 dramas nominados, ganó un 15%.</p>
+        </div>
+      </section>
+
+      <!-- Mismo rectángulo: los puntos de Hamlet, El Padrino II y Moonlight en blanco; leyenda solo con el drama -->
+      <section class="step zoom-step" data-step="13" data-section="genero">
+        <div class="card">
+          <h1>¿Pero, fue el "drama" siempre "drama"?</h1>
+        </div>
+      </section>
+      <!-- Instancia intermedia: el bloque de drama queda solo y sube; este texto
+           aparece centrado en el espacio vacío de abajo (data-float: script.js lo
+           muestra ahí en vez de en la zona de texto), antes de las películas -->
+      <section class="step zoom-step" data-step="14" data-section="genero">
+        <div class="card" data-float>
+          <h1>Lo que el drama contó fue cambiando</h1>
+          <p>Tres dramas ganadores, tres épocas: cómo cambió el prestigio.</p>
+        </div>
+      </section>
+      <!-- Zoom in de a una: Hamlet aparece en su círculo y, a la derecha, la era del cine a la que pertenece (h1 en azul drama) -->
+      <section class="step zoom-step" data-step="15" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Hamlet: título, año y descripción -->
+      <section class="step zoom-step" data-step="16" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Zoom in de a una: El Padrino II, primero su era del cine -->
+      <section class="step zoom-step" data-step="17" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- El Padrino II: título, año y descripción -->
+      <section class="step zoom-step" data-step="18" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Zoom in de a una: Moonlight, primero su era del cine -->
+      <section class="step zoom-step" data-step="19" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Moonlight: título, año y descripción -->
+      <section class="step zoom-step" data-step="20" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Moonlight, una instancia más: en el mismo círculo, el video de la ceremonia
+           (con sonido) y al lado el incidente del sobre con La La Land -->
+      <section class="step zoom-step" data-step="21" data-section="genero">
+        <div class="card"></div>
+      </section>
+
+      <!-- Vuelta a los bloques por género del inicio (colores y leyenda), para marcar
+           que ahora se analiza otro aspecto (sin texto) -->
+      <section class="step" data-step="22" data-section="genero">
+        <div class="card">
+           <h2>Pero, ¿cuál es el género más ganador?</h2>
+          <p>¿Qué género garantiza más probabilidad de victoria?</p>
+        </div>
+      </section>
+
+      <!-- Tasa de victoria con la misma lógica de bloques: en cada género, las
+           ganadoras primero (amarillo) y arriba de cada bloque su tasa de victoria -->
+      <section class="step" data-step="23" data-section="genero">
+        <div class="card">
+          <h2>La tasa de victoria.</h2>
+          <p>No todos los géneros tienen la misma proporción.</p>
+        </div>
+      </section>
+
+      <!-- Mismos bloques: se destaca el drama -->
+      <section class="step" data-step="24" data-section="genero">
+        <div class="card">
+          <h2>Drama: un tercio de las premiadas en toda la historia</h2>
+          <p>Con 33 ganadoras, el drama suma más victorias que cualquier otro género.</p>
+        </div>
+      </section>
+
+      <!-- Mismos bloques: se destaca el bélico -->
+      <section class="step" data-step="25" data-section="genero">
+        <div class="card">
+          <h2>Bélico: la apuesta más segura.</h2>
+          <p>Solo 44 películas bélicas fueron nominadas, pero 13 ganaron: un 30%, el doble que el drama.</p>
+        </div>
+      </section>
+
+      <!-- Bélico (como el drama): los demás bloques desaparecen y el bélico se centra arriba -->
+      <section class="step" data-step="26" data-section="genero" hidden>
+        <div class="card">
+          <h1>La guerra: la apuesta más segura</h1>
+          <p>Aunque no es garantía: 7 de cada 10 bélicas nominadas se fueron sin el premio.</p>
+        </div>
+      </section>
+
+      <!-- Bloque bélico: se destacan las tres ganadoras del trío; el texto va centrado en el espacio vacío de abajo (data-float), como en el drama -->
+      <section class="step zoom-step" data-step="27" data-section="genero">
+        <div class="card" data-float>
+          <h1>¿Por qué gana la guerra?</h1>
+          <p>Cada una de sus ganadoras contó la guerra de su tiempo: la primera ganadora de la historia, la posguerra y un conflicto contemporáneo.</p>
+        </div>
+      </section>
+      <!-- Era de Wings (h1 en verde bélico): "El recuerdo de la Primera Guerra Mundial" -->
+      <section class="step zoom-step" data-step="28" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Zoom in de a una (como el drama): Wings, con su círculo a la izquierda y su texto a la derecha, debajo del bloque -->
+      <section class="step zoom-step" data-step="29" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Era de The Best Years of Our Lives: "El trauma de la Segunda Guerra" -->
+      <section class="step zoom-step" data-step="30" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Zoom in de a una: The Best Years of Our Lives -->
+      <section class="step zoom-step" data-step="31" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Era de The Hurt Locker: "Conflictos contemporáneos" -->
+      <section class="step zoom-step" data-step="32" data-section="genero">
+        <div class="card"></div>
+      </section>
+      <!-- Zoom in de a una: The Hurt Locker -->
+      <section class="step zoom-step" data-step="33" data-section="genero">
+        <div class="card"></div>
+      </section>
+
+      <!-- Sin grilla ni puntos: solo este texto, centrado y un poco más arriba (data-float) -->
+      <section class="step zoom-step" data-step="34" data-section="genero">
+        <div class="card" data-float>
+          <h1>¿Pero, cuál es el futuro de los géneros?</h1>
+          <p>Lo que nos dicen los datos sobre el prestigio de un género a través del tiempo y su éxito en la Academia.</p>
+        </div>
+      </section>
+
+      <section class="step" data-step="35" data-section="genero">
+        <div class="card">
+          
+        </div>
+      </section>
+
+      <!-- El romance aislado (fondo rosado): su fila arriba, un corazón de puntos que se
+           parte (#heart) y este texto. Los porcentajes se calculan con los datos (data-stat) -->
+      <section class="step" data-step="36" data-section="genero">
+        <!-- data-float: el texto va debajo del corazón (ROMANCE_TEXT_Y). Los &nbsp; evitan que la cifra quede sola en la última línea -->
+        <div class="card" data-float>
+          <h1 class="title-romance">El romance es el pasado</h1>
+          <p>En los años 30, el <strong data-stat="romance-30s"></strong> de las nominadas eran romances. En la última década, apenas&nbsp;el&nbsp;<strong data-stat="romance-last"></strong>.</p>
+        </div>
+      </section>
+
+      <!-- La biopic aislada (fondo anaranjado): su fila arriba, una estrella de puntos
+           (#mask-icon) y este texto debajo (data-float). Cifras calculadas (data-stat) -->
+      <section class="step" data-step="37" data-section="genero">
+        <div class="card" data-float>
+          <h1 class="title-biopic">La biografía está de moda</h1>
+          <p>En los años 30, el <strong data-stat="biopic-30s"></strong> de las nominadas contaba la vida de una persona real. En la última década, el <strong data-stat="biopic-last"></strong>: <strong data-stat="biopic-last-n"></strong> biopics compitieron por&nbsp;el&nbsp;premio.</p>
+        </div>
+      </section>
+
+      <!-- El drama aislado (fondo azulado): su fila arriba, una máscara de teatro de puntos
+           (#mask-icon) y este texto debajo (data-float). Porcentajes calculados (data-stat) -->
+      <section class="step" data-step="38" data-section="genero">
+        <div class="card" data-float>
+          <h1 class="title-drama">El drama es eterno</h1>
+          <p>En los años 30, el <strong data-stat="drama-30s"></strong> de las nominadas eran dramas. En la última década, el <strong data-stat="drama-last"></strong>. Casi un siglo después, sigue en el centro de&nbsp;los&nbsp;Óscar.</p>
+        </div>
+      </section>
+
+
+      <!-- Entrada a Duración: la palabra hecha de puntos (sin texto) -->
+      <section class="step" data-step="39" data-section="duracion">
+        <div class="card"></div>
+      </section>
+
+      <!-- Duración: distribución de las películas por minutos (columnas apiladas) -->
+      <section class="step" data-step="40" data-section="duracion">
+        <div class="card">
+          <h2>¿Cuánto dura una nominada?</h2>
+          <p>La mitad de las nominadas dura entre 108 y 139 minutos: alrededor de dos horas.</p>
+        </div>
+      </section>
+
+      <!-- Duración: se resalta la franja de duración más común (110–119 min) -->
+      <section class="step" data-step="41" data-section="duracion">
+        <div class="card">
+          <h2>La franja más común</h2>
+          <p>La franja más común va de 110 a 119 minutos: 111 de 621 películas (18%), casi dos horas exactas.</p>
+        </div>
+      </section>
+
+      <!-- Duración: la más corta y la más larga se encienden en blanco -->
+      <section class="step" data-step="42" data-section="duracion">
+        <div class="card">
+          <h2>Pero ¿cuáles fueron los extremos?</h2>
+          <p>De 66 a 238 minutos: una diferencia de casi tres horas.</p>
+        </div>
+      </section>
+
+      <!-- Los dos extremos a la vez: She Done Him Wrong y Gone with the Wind con foto,
+           título y año; entre los círculos, la diferencia en horas y minutos (sin texto en la columna) -->
+      <section class="step zoom-step" data-step="43" data-section="duracion">
+        <div class="card"></div>
+      </section>
+      <!-- Los dos extremos: video + dato de cada uno ("1h 6 min" y "3h 58 min") -->
+      <section class="step zoom-step" data-step="44" data-section="duracion">
+        <div class="card"></div>
+      </section>
+
+      <!-- El histograma de duración "explota" en tres gráficos apilados: años 30,
+           60 y 2020 (década inicial, la de películas más largas y la actual) -->
+      <section class="step" data-step="45" data-section="duracion">
+        <div class="card"></div>
+      </section>
+
+      <section class="step" data-step="46" data-section="duracion">
+        <div class="card">
+          <h2>Las dos horas, cada vez más comunes</h2>
+          <p>En los años 30, apenas 1 de cada 6 nominadas pasaba las dos horas; en la década de 2020, ya son 7 de cada 10.</p>
+        </div>
+      </section>
+
+      <!-- Duración: línea de tendencia sobre la dispersión (de aquí se pasa directo a los 60) -->
+      <section class="step" data-step="47" data-section="duracion">
+        <div class="card">
+          <h2>Cada vez más largas</h2>
+          <p>Las nominadas tienden, en promedio, a aumentar 2,4 minutos por década.</p>
+        </div>
+      </section>
+
+      <!-- Duración: se resalta la década de 1960 -->
+      <section class="step" data-step="48" data-section="duracion">
+        <div class="card">
+          <h1>60's: La década de los épicos</h1>
+          <p>En los 60, ir al cine era una maratón: las nominadas promediaron 142 minutos, el récord de toda la historia.</p>
+      
+        </div>
+      </section>
+
+      <!-- Trío de los 60: Lawrence of Arabia, Doctor Zhivago y Cleopatra con título y año, y una línea de contexto -->
+      <section class="step zoom-step" data-step="49" data-section="duracion">
+        <div class="card">
+          <p>Tres épicos de más de tres horas: cuando ir al cine era un evento.</p>
+        </div>
+      </section>
+      <!-- Trío de los 60: Lawrence of Arabia muestra su descripción -->
+      <section class="step zoom-step" data-step="50" data-section="duracion">
+        <div class="card"></div>
+      </section>
+      <!-- Trío de los 60: Doctor Zhivago muestra su descripción -->
+      <section class="step zoom-step" data-step="51" data-section="duracion">
+        <div class="card"></div>
+      </section>
+      <!-- Trío de los 60: Cleopatra muestra su descripción -->
+      <section class="step zoom-step" data-step="52" data-section="duracion">
+        <div class="card"></div>
+      </section>
+
+      <!-- Ganadoras vs. nominadas: promedio por década de cada grupo -->
+      <section class="step" data-step="53" data-section="duracion">
+        <div class="card">
+          <h2>Las ganadoras duran más</h2>
+          <p>En promedio, una ganadora dura 138 minutos; una nominada que no ganó, 124. Las ganadoras fueron más largas en 10 de las 11 décadas.</p>
+        </div>
+      </section>
+
+      <!-- Ganadoras vs. nominadas: foco en los 2010, la única década en que se invierte -->
+      <section class="step" data-step="54" data-section="duracion">
+        <div class="card">
+          <h2>La excepción: los 2010</h2>
+          <p>La única década en que las ganadoras fueron más cortas: 122 minutos contra 127. The Artist (100 min), Moonlight (111) y Birdman (119) rompieron el patrón.</p>
+        </div>
+      </section>
+
+      <!-- Entrada a Productora: la palabra hecha de puntos (sin texto) -->
+      <section class="step" data-step="55" data-section="productora">
+        <div class="card"></div>
+      </section>
+
+      <section class="step end" data-step="56" data-section="cierre">
+        <div class="card">
+          <h2>Fuente</h2>
+          <p>Datos: oscars.csv. Edita estos textos en index.html.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="tooltip"></div>
+
+  <!-- Video de YouTube de la portada anterior (INTRO_VIDEO en script.js): ya no se usa,
+       se deja por si se vuelve a necesitar -->
+  <!-- Grilla de video: el video local (en blanco y negro, con sonido) solo se ve dentro
+       de los círculos de la grilla (máscara). El tramo y la grilla se definen en script.js -->
+  <div id="mask-video" aria-hidden="true">
+    <video id="mask-player" src="video/andtheoscargoesto.mp4" muted loop playsinline preload="auto"></video>
+  </div>
+
+  <!-- Primera y última ganadora: pantalla dividida en dos. Izquierda: línea de tiempo
+       y texto; derecha: póster. Entre una y otra la línea de tiempo se desliza en
+       horizontal, el texto cambia en su lugar y los pósters cambian en vertical.
+       El contenido lo arma script.js (showSplit) -->
+  <div id="split" aria-hidden="true">
+    <div class="split-texts"></div>
+    <div class="split-bgvideos"></div>
+    <div class="split-posters"></div>
+    <div class="split-tl"><div class="split-tl-track"></div><span class="split-tl-dot"></span></div>
+  </div>
+
+  <!-- Botón para activar el sonido del video de la portada (si el navegador lo bloqueó) -->
+  <button id="sound-btn" type="button">🔊 Activar sonido</button>
+
+  <div id="intro-video" aria-hidden="true">
+    <div id="intro-player"></div>
+  </div>
+
+  <!-- Movie-Zoom-In: video recortado en un círculo (clip-path) que crece desde un punto -->
+  <div id="zoom" aria-hidden="true">
+    <div id="zoom-player"></div>
+    <div id="zoom-tint"></div>
+    <div id="zoom-dim"></div>
+    <div id="zoom-title"><h2></h2><p></p></div>
+    <div id="zoom-caption"></div>
+  </div>
+
+  <!-- Trío: tres círculos con video a la vez (los arma script.js) -->
+  <div id="trio" aria-hidden="true"></div>
+
+  <!-- Zoom in de a una película: título, año y descripción al lado del círculo -->
+  <!-- Círculo enorme del sobre equivocado (Moonlight): video con sonido y texto a la derecha (showBigCircle) -->
+  <div id="big-circle" aria-hidden="true"></div>
+
+  <!-- Corazón de puntos que se parte (paso del romance; lo arma script.js: showHeart) -->
+  <div id="heart" aria-hidden="true"></div>
+  <!-- Máscara de teatro de puntos (paso del drama; la arma script.js: showMaskIcon) -->
+  <div id="mask-icon" aria-hidden="true"></div>
+
+  <!-- Texto flotante de los pasos con data-float (lo llena y ubica script.js) -->
+  <div id="float-note" class="card" aria-hidden="true"></div>
+  <div id="zoom-info" aria-hidden="true"><h1 class="zi-era"></h1><h3></h3><p class="zi-year"></p><p class="zi-desc"></p></div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
